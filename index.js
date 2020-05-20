@@ -10,6 +10,12 @@ const socket =  io.on('connection', socket => {
         console.log(room_id);
     });
 
+    socket.on('unsubscribe', function unsubscribe({room_id}) {
+        socket.leave(room_id, function() {
+            console.log(`Client ${socket.id} leaved the room ${room_id}`);
+        });
+    });
+
     socket.on('update_location', function updateLocation(payload) {
         console.log(payload);
         io.in(payload.room_id).emit('new_location', payload.payload);

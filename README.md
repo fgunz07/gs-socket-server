@@ -57,6 +57,10 @@ server {
             // Do something
         });
     });
+
+    setTimeout(function() {
+        socket.emit('unsubscribe', { room_id: 'EHGQg9n1O26Z_qKyAAAA' });
+    }, 30000);
 ```
 
 #### Example: Sender
@@ -89,5 +93,9 @@ server {
         socket.on('new_location', function newLocation(payload) {
             // Do something
         });
+
+        setTimeout(function() {
+            socket.emit('unsubscribe', { room_id: <room_id> });
+        }, 30000);
     });
 ```
