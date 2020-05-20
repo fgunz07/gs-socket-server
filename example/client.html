@@ -8,16 +8,25 @@
 <body>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script> -->
     <script src="../client.min.js"></script>
+    <!-- <script src="./localState.js"></script> -->
     <script>
-        const {socket, connection, reconnect} = new GSocket('http://127.0.0.1:3000');
+        // const [data, dispatch] = useReducer(reducer, false);
+        const {socket, connection, reconnect} = new GSocket('https://map-socket.gogetserved.com');
+        let isDeal = true;
 
         connection(function(socket) {
-            socket.emit('subscribe', { room_id: 'uEBPXmzYPYvIAyoPAAAE' });
+            if(isDeal) socket.emit('subscribe', { room_id: 'bUIL7S2RvOSk1OOHAAAB' });
             socket.on('new_location', function newLocation(payload) {
                 console.log(payload);
             });
         });
         reconnect();
+
+        setTimeout(function() {
+            socket.emit('unsubscribe', { room_id: 'EHGQg9n1O26Z_qKyAAAA' });
+            isDeal = false;
+            // dispatch({ type: DEAL, payload: false });
+        }, 30000);
 
         // const socket = io('http://localhost:3000');
 
