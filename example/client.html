@@ -9,10 +9,10 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script> -->
     <script src="../client.min.js"></script>
     <script>
-        const {socket, connection, reconnect} = new GSocket('http://127.0.0.1:3000');
+        const {socket, connection, reconnect} = new GSocket('http://map-socket.gogetserved.com');
 
         connection(function(socket) {
-            socket.emit('subscribe', { room_id: 'uEBPXmzYPYvIAyoPAAAE' });
+            socket.emit('subscribe', { room_id: 'zte6rBfx0k6mzBSVAAAG' });
             socket.on('new_location', function newLocation(payload) {
                 console.log(payload);
             });

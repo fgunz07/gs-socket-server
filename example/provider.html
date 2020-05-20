@@ -9,7 +9,7 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script> -->
     <script src="../client.min.js"></script>
     <script>
-        const {socket, connection, reconnect} = new GSocket('http://localhost:3000');
+        const {socket, connection, reconnect} = new GSocket('http://map-socket.gogetserved.com');
         connection(function(socket) {
             console.log(socket.id);
             socket.emit('subscribe', { room_id: socket.id });

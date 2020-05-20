@@ -23,7 +23,26 @@ pm2 monit
 
 ##### Nginx config
 ```
+upstream websocket {
+    server 127.0.0.1:3000;
+}
 
+server {
+    listen 80 default;
+
+    server_name map-socket.gogetserved.com;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+
+        proxy_pass http://websocket;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
 ```
 
 #### Example: Receiver
@@ -36,7 +55,6 @@ pm2 monit
 
         socket.on('new_location', function newLocation(payload) {
             // Do something
-            console.log(payload);
         });
     });
 ```
@@ -69,8 +87,7 @@ pm2 monit
         }, 4000);
 
         socket.on('new_location', function newLocation(payload) {
-            // do something
-            console.log(payload);
+            // Do something
         });
     });
 ```
