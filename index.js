@@ -12,7 +12,7 @@ const socket =  io.on('connection', socket => {
 
     socket.on('update_location', function updateLocation(payload) {
         console.log(payload);
-        socket.broadcast.to(payload.room_id).emit('new_location', payload.payload);
+        io.in(payload.room_id).emit('new_location', payload.payload);
     });
 
     socket.on('disconnect', () => {
