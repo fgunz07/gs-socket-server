@@ -2,10 +2,22 @@
     "host": "localhost",
     "port": 1337,
     "dbUri": "mongodb://localhost:27017/getserved-socket",
-    "jwtOptions": {
-        "authorized": {
+    "allowedOrigins": [
+        "*"
+    ],
+    "saltWorkFactor": 30,
+    "socket": {
+        "adapter": "redis",
+        "redisUrl": "redis://localhost:6379",
+        "keys": {
             "socket_key": "",
             "socket_secret": ""
+        }
+    },
+    "jwtOptions": {
+        "authorized": {
+            "private_key": "",
+            "public_key": ""
         },
         "accessTokenTtl": "15m",
         "refreshTokenTtl": "1y"

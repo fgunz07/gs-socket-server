@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { deleteSocket } from "../../services/socket.service";
 import { logAccess, logger } from "../../utils/logger.util";
 
@@ -8,10 +8,8 @@ type DataParam = {
     [key: string]: any;
 }
 
-const chattHandler = function(socket: Socket) {
+const chattHandler = (io: Server) => (socket: Socket) => {
     logger.info(`Connected SocketID: ${socket.id}`);
-
-    socket.join(`${socket.id}`); // Default room for this connection
 
     socket.on("chat:enter", chatEnter);
     socket.on("chat:active", chatActive);
@@ -29,39 +27,39 @@ const chattHandler = function(socket: Socket) {
     socket.on("disconnect", disconnect);
 
     function chatEnter(data: DataParam) {
-        socket.to(data.room).emit("chat:enter", data.payload);
+        socket.broadcast.to(data.room).emit("chat:enter", data.payload);
     }
 
     function chatActive(data: DataParam) {
-        socket.to(data.room).emit("chat:active", data.payload);
+        socket.broadcast.to(data.room).emit("chat:active", data.payload);
     }
     
     function chatTyping(data: DataParam) {
-        socket.to(data.room).emit("chat:typing", data.payload);
+        socket.broadcast.to(data.room).emit("chat:typing", data.payload);
     }
 
     function chatMessage(data: DataParam) {
-        socket.to(data.room).emit("chat:message", data.payload);
+        socket.broadcast.to(data.room).emit("chat:message", data.payload);
     }
 
     function chatGroupEnter(data: DataParam) {
-        socket.to(data.room).emit("chat:group:enter", data.payload);
+        socket.broadcast.to(data.room).emit("chat:group:enter", data.payload);
     }
 
     function chatGroupActive(data: DataParam) {
-        socket.to(data.room).emit("chat:group:active", data.payload);
+        socket.broadcast.to(data.room).emit("chat:group:active", data.payload);
     }
 
     function chatGroupTyping(data: DataParam) {
-        socket.to(data.room).emit("chat:group:typing", data.payload);
+        socket.broadcast.to(data.room).emit("chat:group:typing", data.payload);
     }
 
     function chatGroupMessage(data: DataParam) {
-        socket.to(data.room).emit("chat:group:message", data.payload);
+        socket.broadcast.to(data.room).emit("chat:group:message", data.payload);
     }
 
     function broadcast(data: DataParam) {
-        socket.to(data.room).emit("message", data.payload);
+        socket.broadcast.to(data.room).emit("message", data.payload);
         logAccess.info(`SockerId: ${socket.id} broadcast a message to room ${data.room}.`);
     }
 

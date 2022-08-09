@@ -15,13 +15,15 @@ app.use(express.urlencoded({ extended: false }));
 
 const server = http.createServer(app);
 
-server.listen(_PORT, _HOST, async () => {
-    await dbConnect();
-
-    socket(server);
-    routes(app);
+const bootstrap = () => {
+    server.listen(_PORT, _HOST, async () => {
+        await dbConnect();
     
-    logger.info(`Server with environment ${process.env.NODE_END} and running on http://${_HOST}:${_PORT}`);
-});
+        socket(server);
+        routes(app);
+        
+        logger.info(`Server with environment ${process.env.NODE_ENV} and running on http://${_HOST}:${_PORT}`);
+    });
+}
 
-export default server;
+export default bootstrap;

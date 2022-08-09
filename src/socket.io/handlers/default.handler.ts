@@ -9,27 +9,33 @@ type DataParam = {
     payload: any;
 }
 
-const defaultHandler = (io: Server) => (socket: Socket, ) => {
+const defaultHandler = (io: Server) => (socket: Socket) => {
     logger.info(`Connected SocketID: ${socket.id}`);
     socket.on("join:room", join);
     socket.on("leave:room", leave);
     socket.on("message:room", broadcast);
+    socket.on("update:location", updateLocation);
     socket.on("disconnect", disconnect);
 
+    function updateLocation(data: DataParam) {
+        socket.broadcast.to(data.room).emit("update:location", data.payload);
+        logAccess.info(`SockerId: ${socket.id} broadcast a message to room ${data.room}.`);
+    }
+
     function broadcast(data: DataParam) {
-        io.to(data.room).emit("message:room", data.payload);
+        socket.broadcast.to(data.room).emit("message:room", data.payload);
         logAccess.info(`SockerId: ${socket.id} broadcast a message to room ${data.room}.`);
     }
 
     function join(data: DataParam) {
         socket.join(data.room);
-        socket.to(data.room).emit("join:room", data.payload);
+        socket.broadcast.to(data.room).emit("join:room", data.payload);
         logAccess.info(`${socket.id} joined/created the room ${data.room}.`);
     }
     
     function leave(data: DataParam) {
         socket.leave(data.room);
-        socket.to(data.room).emit("leave:room", data.payload);
+        socket.broadcast.to(data.room).emit("leave:room", data.payload);
         logAccess.info(`${socket.id} left the room ${data.room}.`);
     }
 
