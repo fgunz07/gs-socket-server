@@ -215,7 +215,7 @@ Use the `BLANK_README.md` to get started.
 
     // register client-side event
     socket.emit("channel:action", {}); // payload object or string
-    socket.on("channel:action", callback() => {})
+    socket.on("channel:action", callback(payload) => {})
 
 ```
 
