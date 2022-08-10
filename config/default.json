@@ -1,14 +1,14 @@
 {
     "host": "localhost",
     "port": 1337,
-    "dbUri": "mongodb://localhost:27017/getserved-socket",
+    "dbUri": "",
     "allowedOrigins": [
         "*"
     ],
     "saltWorkFactor": 30,
     "socket": {
         "adapter": "redis",
-        "redisUrl": "redis://localhost:6379",
+        "redisUrl": "redis://:admin123@localhost:6379",
         "keys": {
             "socket_key": "",
             "socket_secret": ""

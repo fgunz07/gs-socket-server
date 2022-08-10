@@ -15,7 +15,10 @@ const initAdapter = async (io: Server) => {
         io.adapter(createAdapter(pubClient, subClient));
         logger.info("Socket adapter connected to redis.");
     })
-    .catch((error) => logger.error(`Error connecting ${error}`));
+    .catch((error) => {
+        logger.error(`Error connecting ${error}`);
+        // process.exit(0);
+    });
 }
 
 export default initAdapter;
