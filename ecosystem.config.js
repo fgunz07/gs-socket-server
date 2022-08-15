@@ -4,7 +4,6 @@ module.exports = {
   apps : [{
     name: "socket_server",
     script: 'build/index.js',
-    watch: './build',
     env: {
       NODE_ENV: "production",
     },
