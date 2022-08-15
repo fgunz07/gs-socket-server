@@ -3,3 +3,4 @@ yarn.lock
 .env
 build
 config/production.json
+pm2/*

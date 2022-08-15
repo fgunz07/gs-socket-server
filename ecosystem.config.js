@@ -12,9 +12,9 @@ module.exports = {
     exec_mode: "cluster",
     watch: true,
     max_memory_restart: "150M",
-    error_file: path.join(__dirname+"./pm2/error.log"),
-    out_file: path.join(__dirname+"./pm2/error.log"),
-    pid_file: path.join(__dirname+"./pm2/pid.log")
+    error_file: __dirname+"/pm2/error.log",
+    out_file: __dirname+"/pm2/error.log",
+    pid_file: __dirname+"/pm2/pid.log"
   }],
   // deploy : {
   //   production : {
