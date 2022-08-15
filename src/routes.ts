@@ -9,6 +9,13 @@ function routes(app: Express) {
     const session = express.Router();
     const user = express.Router();
 
+    user.use("/user", validateResource(createUserSchema), user);
+    session.use("/", session);
+
+    app.get("/", (req, res) => {
+        res.redirect("/healthcheck");
+    });
+
     app.get("/healthcheck", (req, res) => {
         return res.sendStatus(200);
     });
@@ -17,15 +24,14 @@ function routes(app: Express) {
         .get(SessionController.show)
         .post(SessionController.create)
         .delete(SessionController.del);
-    
+
     user.route("/user")
+        .post(UserController.create);
+    
+    user.route("/user/:id")
         .get(UserController.show)
-        .post(UserController.create)
         .put(UserController.update)
         .delete(UserController.del);
-
-    app.use("/", session);
-    app.use("/", validateResource(createUserSchema), user);
 }
 
 export default routes;
