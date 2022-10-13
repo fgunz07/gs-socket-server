@@ -49,7 +49,9 @@ async function globalMiddleware(socket: Socket, next: Function) {
             next(new Error("Invalid access keys."));
         }
 
-        await createSocket({ socket_id: socket.id, namespace: socket.nsp.name });
+        // console.log(socket.handshake.headers["user-agent"]);
+
+        // await createSocket({ socket_id: socket.id, namespace: socket.nsp.name });
 
         next();
 

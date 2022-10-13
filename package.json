@@ -1,6 +1,6 @@
 {
   "name": "getserved-socket",
-  "version": "3.3.30",
+  "version": "3.4.30",
   "description": "Websocket for getserved",
   "main": "build/index.js",
   "scripts": {

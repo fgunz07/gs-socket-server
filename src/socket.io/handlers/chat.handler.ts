@@ -26,6 +26,8 @@ const chattHandler = (io: Server) => (socket: Socket) => {
     socket.on("broadcast", broadcast);
     socket.on("disconnect", disconnect);
 
+    socket.on("custom:event", customEvent);
+
     function chatEnter(data: DataParam) {
         socket.broadcast.to(data.room).emit("chat:enter", data.payload);
     }
@@ -76,6 +78,15 @@ const chattHandler = (io: Server) => (socket: Socket) => {
     async function disconnect(error: string) {
         await deleteSocket(socket.id);
         logAccess.warn(`Disconnected SocketID: ${socket.id}; cause ${error}`);
+    }
+
+    function customEvent(payload: { event_name: string, room?: string, data?: any  }) {
+        if(!payload.room) {
+            socket.broadcast.emit(payload.event_name, payload.data);
+        } else {
+            socket.broadcast.to(payload.room).emit(payload.event_name, payload.data);
+        }
+        logAccess.info(`${socket.id} triggered custom event.`);
     }
 }
 

@@ -22,6 +22,8 @@ const orderHandler = (io: Server) => (socket: Socket) => {
     socket.on("order:pickedup", orderPickedUp);
     socket.on("order:ontheway", orderOnTheWay);
 
+    socket.on("custom:event", customEvent);
+
     function orderAddCart(data: DataParam) {
         if(!data.room) {
             return socket.broadcast.emit("order:add:cart", data.payload);
@@ -75,6 +77,15 @@ const orderHandler = (io: Server) => (socket: Socket) => {
     async function disconnect(error: string) {
         await deleteSocket(socket.id);
         logAccess.warn(`Disconnected SocketID: ${socket.id}; cause ${error}`);
+    }
+
+    function customEvent(payload: { event_name: string, room?: string, data?: any  }) {
+        if(!payload.room) {
+            socket.broadcast.emit(payload.event_name, payload.data);
+        } else {
+            socket.broadcast.to(payload.room).emit(payload.event_name, payload.data);
+        }
+        logAccess.info(`${socket.id} triggered custom event.`);
     }
 }
 

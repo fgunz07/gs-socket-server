@@ -214,8 +214,11 @@ Use the `BLANK_README.md` to get started.
      */
 
     // register client-side event
-    socket.emit("channel:action", {}); // payload object or string
-    socket.on("channel:action", callback(payload) => {})
+    /**
+     * @params { event_name: string, room?: string, data?: any }
+     */
+    socket.emit("custom:event", {}); // payload object or string
+    socket.on("your event", callback(payload) => {});
 
 ```
 
