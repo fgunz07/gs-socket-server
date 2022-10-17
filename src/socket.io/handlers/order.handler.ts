@@ -19,7 +19,9 @@ const orderHandler = (io: Server) => (socket: Socket) => {
     socket.on("order:add:cart", orderAddCart);
     socket.on("order:created", orderCreated);
     socket.on("order:completed", orderCompleted);
-    socket.on("order:pickedup", orderPickedUp);
+    socket.on("order:confirmed", orderConfirmed);
+    socket.on("order:preparing", orderPreparing);
+    socket.on("order:fordelivery", orderForDelivery);
     socket.on("order:ontheway", orderOnTheWay);
 
     socket.on("custom:event", customEvent);
@@ -45,11 +47,11 @@ const orderHandler = (io: Server) => (socket: Socket) => {
         return socket.broadcast.to(data.room).emit("order:completed", data.payload);
     }
 
-    function orderPickedUp(data: DataParam) {
+    function orderForDelivery(data: DataParam) {
         if(!data.room) {
-            return socket.broadcast.emit("order:pickedup", data.payload);
+            return socket.broadcast.emit("order:fordelivery", data.payload);
         }
-        return socket.broadcast.to(data.room).emit("order:pickedup", data.payload);
+        return socket.broadcast.to(data.room).emit("order:fordelivery", data.payload);
     }
 
     function orderOnTheWay(data: DataParam) {
@@ -86,6 +88,20 @@ const orderHandler = (io: Server) => (socket: Socket) => {
             socket.broadcast.to(payload.room).emit(payload.event_name, payload.data);
         }
         logAccess.info(`${socket.id} triggered custom event.`);
+    }
+
+    function orderConfirmed(data: DataParam) {
+        if(!data.room) {
+            return socket.broadcast.emit("order:confirmed", data.payload);
+        }
+        return socket.broadcast.to(data.room).emit("order:confirmed", data.payload);
+    }
+
+    function orderPreparing(data: DataParam) {
+        if(!data.room) {
+            return socket.broadcast.emit("order:preparing", data.payload);
+        }
+        return socket.broadcast.to(data.room).emit("order:preparing", data.payload);
     }
 }
 
