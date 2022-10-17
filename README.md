@@ -156,8 +156,16 @@ Use the `BLANK_README.md` to get started.
     socket.emit("order:add:cart", { room: "room_name", payload: string|object });
     socket.emit("order:created", { room: "room_name", payload: string|object });
     socket.emit("order:completed", { room: "room_name", payload: string|object });
-    socket.emit("order:pickedup", { room: "room_name", payload: string|object });
+    socket.emit("order:confirmed", { room: "room_name", payload: string|object });
+    socket.emit("order:preparing", { room: "room_name", payload: string|object });
+    /**
+     * @Changed from order:pickedup
+     * @To order:fordelivery
+     */
+    // socket.emit("order:pickedup", { room: "room_name", payload: string|object });
+    socket.emit("order:fordeliver", { room: "room_name", payload: string|object });
     socket.emit("order:ontheway", { room: "room_name", payload: string|object });
+
     // register events in client-side
     socket.on("broadcast", callback(payload) => {});
     socket.on("disconnect", callback(payload) => {});
@@ -166,7 +174,14 @@ Use the `BLANK_README.md` to get started.
     socket.on("order:add:cart", callback(payload) => {});
     socket.on("order:created", callback(payload) => {});
     socket.on("order:completed", callback(payload) => {});
-    socket.on("order:pickedup", callback(payload) => {});
+    socket.on("order:confirmed", callback(payload) => {});
+    socket.on("order:preparing", callback(payload) => {});
+    /**
+     * @Changed from order:pickedup
+     * @To order:fordelivery
+     */
+    // socket.on("order:pickedup", callback(payload) => {});
+    socket.on("order:fordelivery", callback(payload) => {});
     socket.on("order:ontheway", callback(payload) => {});
 
     /**
