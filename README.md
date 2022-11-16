@@ -125,116 +125,21 @@ Use the `BLANK_README.md` to get started.
     // Example codes to trigger events
      
     /**
-     * root namespace events
-     * https://<domain>/
+     * Namespace is 
+     * Note: Namespace is dynamic can be named anything and it's required
+     * https://<domain>/root
      */
 
     // trigger server-side events
     socket.emit("join:room", { room: "room_name", payload: string|object });
     socket.emit("leave:room", { room: "room_name", payload: string|object });
-    socket.emit("message:room", { room: "room_name", payload: string|object });
-    socket.emit("update:location", { room: "room_name", payload: string|object });
-    socket.emit("disconnect", { room: "room_name", payload: string|object });
+    // custom Events
+    socket.emit("trigger", { room: "room_name", event: "event_name", payload: string|object});
+
     // register events in client-side
     socket.on("join:room", callback(payload) => {});
     socket.on("leave:room", callback(payload) => {});
-    socket.on("message:room", callback(payload) => {});
-    socket.on("update:location", callback(payload) => {});
-    socket.on("disconnect", callback(payload) => {});
-
-
-    /**
-     * orders namespace evetns
-     * https://<domain>/orders
-     */
-
-    // trigger server-side events
-    socket.emit("broadcast", { room: "room_name", payload: string|object });
-    socket.emit("disconnect", { room: "room_name", payload: string|object });
-    socket.emit("join:room", { room: "room_name", payload: string|object });
-    socket.emit("leave:room", { room: "room_name", payload: string|object });
-    socket.emit("order:add:cart", { room: "room_name", payload: string|object });
-    socket.emit("order:created", { room: "room_name", payload: string|object });
-    socket.emit("order:completed", { room: "room_name", payload: string|object });
-    socket.emit("order:confirmed", { room: "room_name", payload: string|object });
-    socket.emit("order:preparing", { room: "room_name", payload: string|object });
-    /**
-     * @Changed from order:pickedup
-     * @To order:fordelivery
-     */
-    // socket.emit("order:pickedup", { room: "room_name", payload: string|object });
-    socket.emit("order:fordeliver", { room: "room_name", payload: string|object });
-    socket.emit("order:ontheway", { room: "room_name", payload: string|object });
-
-    // register events in client-side
-    socket.on("broadcast", callback(payload) => {});
-    socket.on("disconnect", callback(payload) => {});
-    socket.on("join:room", callback(payload) => {});
-    socket.on("leave:room", callback(payload) => {});
-    socket.on("order:add:cart", callback(payload) => {});
-    socket.on("order:created", callback(payload) => {});
-    socket.on("order:completed", callback(payload) => {});
-    socket.on("order:confirmed", callback(payload) => {});
-    socket.on("order:preparing", callback(payload) => {});
-    /**
-     * @Changed from order:pickedup
-     * @To order:fordelivery
-     */
-    // socket.on("order:pickedup", callback(payload) => {});
-    socket.on("order:fordelivery", callback(payload) => {});
-    socket.on("order:ontheway", callback(payload) => {});
-
-    /**
-     * chat namespace events
-     * https://<domain>/chat
-     */
-    // trigger server-side events
-    socket.emit("chat:enter", { room: "room_name", payload: string|object });
-    socket.emit("chat:active", { room: "room_name", payload: string|object });
-    socket.emit("chat:typing", { room: "room_name", payload: string|object });
-    socket.emit("chat:message", { room: "room_name", payload: string|object });
-    // register events in client-side
-    socket.on("chat:enter", callback(payload) => {});
-    socket.on("chat:active", callback(payload) => {});
-    socket.on("chat:typing", callback(payload) => {});
-    socket.on("chat:message", callback(payload) => {});
-
-    // trigger server-side events
-    socket.emit("chat:group:enter", { room: "room_name", payload: string|object });
-    socket.emit("chat:group:active", { room: "room_name", payload: string|object });
-    socket.emit("chat:group:typing", { room: "room_name", payload: string|object });
-    socket.emit("chat:group:message", { room: "room_name", payload: string|object });
-    // register events in client-side
-    socket.on("chat:group:enter", callback(payload) => {});
-    socket.on("chat:group:active", callback(payload) => {});
-    socket.on("chat:group:typing", callback(payload) => {});
-    socket.on("chat:group:message", callback(payload) => {});
-
-    // trigger server-side events
-    socket.emit("join:room", { room: "room_name", payload: string|object });
-    socket.emit("leave:room", { room: "room_name", payload: string|object });
-    socket.emit("broadcast", { room: "room_name", payload: string|object });
-    socket.emit("disconnect", { room: "room_name", payload: string|object });
-    // register events in client-side
-    socket.on("join:room", callback(payload) => {});
-    socket.on("leave:room", callback(payload) => {});
-    socket.on("broadcast", callback(payload) => {});
-    socket.on("disconnect", callback(payload) => {});
-
-    /**
-     * Registering custom events
-     * Note: This event will be register as a global event in which namespace you are connected 
-     *       which means not isolated to specifc room
-     * 
-     */
-
-    // register client-side event
-    /**
-     * @params { event_name: string, room?: string, data?: any }
-     */
-    socket.emit("custom:event", {}); // payload object or string
-    socket.on("your event", callback(payload) => {});
-
+    socket.on("event_name", callback(payload) => {});
 ```
 
 [Express]: https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white

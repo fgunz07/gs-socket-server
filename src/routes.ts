@@ -13,7 +13,8 @@ function routes(app: Express) {
     session.use("/", session);
 
     app.get("/", (req, res) => {
-        res.redirect("/healthcheck");
+        res.status(200).send("Test");
+        // res.redirect("/healthcheck");
     });
 
     app.get("/healthcheck", (req, res) => {

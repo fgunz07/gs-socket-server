@@ -1,11 +1,12 @@
 import { Server as HttpServer } from "http";
 import { Server, Socket } from "socket.io";
 import { logger } from "../utils/logger.util";
-import { createSocket } from "../services/socket.service";
-import chatHandler from "./handlers/chat.handler";
+// import { createSocket } from "../services/socket.service";
+// import chatHandler from "./handlers/chat.handler";
+// import defaultHandler from "./handlers/default.handler";
+// import orderHandler from "./handlers/order.handler";
 import config from "config";
-import defaultHandler from "./handlers/default.handler";
-import orderHandler from "./handlers/order.handler";
+import dynamicHandler from "./handlers/dynamic.handler";
 import initAdapter from "./adapter";
 
 const _ORIGINS = config.get<Array<string>>("allowedOrigins");
@@ -25,10 +26,16 @@ async function socket(http: HttpServer) {
         });
 
         await initAdapter(io);
+
+        io.of((name, auth, next) => {
+            next(null, true);
+        })
+        .use(globalMiddleware)
+        .on("connection", dynamicHandler(io));
     
-        io.of("/").use(globalMiddleware).on("connection", defaultHandler(io));
-        io.of("/chat").use(globalMiddleware).on("connection", chatHandler(io));
-        io.of("/orders").use(globalMiddleware).on("connection", orderHandler(io));
+        // io.of("/").use(globalMiddleware).on("connection", defaultHandler(io));
+        // io.of("/chat").use(globalMiddleware).on("connection", chatHandler(io));
+        // io.of("/orders").use(globalMiddleware).on("connection", orderHandler(io));
     
         logger.info(`Socket server with environment ${process.env.NODE_ENV} and running on http://${_HOST}:${_PORT}/socket.io/`);
     } catch(error: any) {

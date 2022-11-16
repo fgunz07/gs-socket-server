@@ -6,7 +6,7 @@ import socket from "./socket.io";
 import routes from "./routes";
 import dbConnect from "./utils/db-connect.util";
 
-const _HOST = config.get<string>("host");
+const _HOST = config.get<number>("host");
 const _PORT = config.get<number>("port");
 const app = express();
 
