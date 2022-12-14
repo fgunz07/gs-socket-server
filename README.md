@@ -76,16 +76,6 @@ Use the `BLANK_README.md` to get started.
 * [![Node][Node.js]][Node-url]
 * [![Express][Express]][Express-url]
 * [![SocketIO][Socket.io]][SocketIO-url]
-<!-- * [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url] -->
-
-<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -136,7 +126,7 @@ Use the `BLANK_README.md` to get started.
     // custom Events
     socket.emit("trigger", { room: "room_name", event: "event_name", payload: string|object});
 
-    // register events in client-side
+    // register events on client-side
     socket.on("join:room", callback(payload) => {});
     socket.on("leave:room", callback(payload) => {});
     socket.on("event_name", callback(payload) => {});
