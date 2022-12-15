@@ -46,7 +46,7 @@
       "channel-1",
       "channel-2",
     ];
-    const socket = io("https://socket.getserved.ph/", {
+    const socket = io("http://localhost:1337/root", {
       autoConnect: false,
       transports: ["websocket", "polling"],
       query: {
@@ -54,6 +54,8 @@
         socket_secret: "Saa0xRpK5hjjO4U3tQofEN81"
       }
     });
+
+    socket.io.ns
 
     const module = {
       uuid: null,
@@ -111,7 +113,7 @@
         $(document).on("click", `#btnLeave1`, module.leave);
         module.btnSend.on("click", () => {
           if (module.connected) {
-            socket.emit("message:room", { room: module.room,  payload: { sender: module.uuid, message: `${module.message.val()}`} });
+            socket.emit("trigger", { room: module.room, event: "message:room",  payload: { sender: module.uuid, message: `${module.message.val()}`} });
             return
           }
 

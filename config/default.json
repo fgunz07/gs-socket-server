@@ -1,17 +1,17 @@
 {
-    "host": "localhost",
+    "host": "0.0.0.0",
     "port": 1337,
-    "dbUri": "mongodb://localhost:27017/getserved-socket",
+    "dbUri": "mongodb://mongo:27017/getserved-socket",
     "allowedOrigins": [
         "*"
     ],
     "saltWorkFactor": 30,
     "socket": {
         "adapter": "redis",
-        "redisUrl": "redis://localhost:6379",
+        "redisUrl": "redis://redis:6379",
         "keys": {
-            "socket_key": "",
-            "socket_secret": ""
+            "socket_key": "Rccueb3FOD32",
+            "socket_secret": "Saa0xRpK5hjjO4U3tQofEN81"
         }
     },
     "jwtOptions": {
