@@ -1,7 +1,0 @@
-{"level":30,"time":"2022-08-02T15:27:31+08:00","pid":10296,"hostname":"vip","msg":"Server with environment undefined and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:27:41+08:00","pid":10335,"hostname":"vip","msg":"Server with environment undefined and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:29:49+08:00","pid":10414,"hostname":"vip","msg":"Server with environment undefined and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:32:17+08:00","pid":10744,"hostname":"vip","msg":"Server with environment undefined and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:35:13+08:00","pid":10884,"hostname":"vip","msg":"Server with environment development and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:35:42+08:00","pid":10967,"hostname":"vip","msg":"Server with environment production and running on http://localhost:1337"}
-{"level":30,"time":"2022-08-02T15:39:46+08:00","pid":11171,"hostname":"vip","msg":"Server with environment production and running on http://localhost:1337"}
