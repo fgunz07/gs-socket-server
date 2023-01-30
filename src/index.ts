@@ -1,11 +1,11 @@
 import http, { Server } from "http";
-import dotenv from "dotenv";
 
-import app from "./app";
+// import app from "./app";
+import initSocket from "./socket.io";
 
-dotenv.config();
+const server: Server = http.createServer();
+const _PORT = (process.env.NODE_PORT || 8080) as number;
 
-const server: Server = http.createServer(app);
-const _PORT = (process.env.PORT || 8080) as number;
+initSocket(server);
 
-server.listen(_PORT, () => console.log(`Started ${_PORT}`));
+server.listen(_PORT, () => console.log(`[::]:${_PORT}`));
