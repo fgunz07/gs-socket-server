@@ -14,13 +14,15 @@ describe('root namespace', () => {
     redis_host: string,
     redis_port: number,
     redis_user: string,
-    redis_pass: string;
+    redis_pass: string,
+    auth_token: string;
   const channel = 'laravel.event.7a7d0d7c-bb7b-40d7-ad65-f7b10927c25a';
   const p = { room: channel, data: null };
 
   beforeAll((done) => {
     try {
       port = (process.env.PORT || 3000) as number;
+      auth_token = (process.env.AUTH_TOKEN || '123') as string;
       redis_host = (process.env.REDIS_HOST || '127.0.0.1') as string;
       redis_port = (process.env.REDIS_PORT || 6379) as number;
       redis_user = (process.env.REDIS_USER || '') as string;
@@ -31,7 +33,7 @@ describe('root namespace', () => {
       s.listen(port, () => {
         c = io(`http://localhost:${port}/root`, {
           auth: {
-            token: '123',
+            token: auth_token,
           },
           transports: ['websocket', 'polling'],
         });
@@ -51,11 +53,10 @@ describe('root namespace', () => {
     }
   });
 
-  afterAll((done) => {
+  afterAll(() => {
     s.close();
     r.quit();
     c.close();
-    done();
   });
 
   describe('event inside namespace', () => {

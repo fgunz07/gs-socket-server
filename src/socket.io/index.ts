@@ -8,6 +8,7 @@ const REDIS_HOST = (process.env.REDIS_HOST || 'localhost') as string;
 const REDIS_PORT = (process.env.REDIS_PORT || 6379) as number;
 const REDIS_USER = (process.env.REDIS_USER || '') as string;
 const REDIS_PASS = (process.env.REDIS_PASS || '') as string;
+const AUTH_TOKEN = (process.env.AUTH_TOKEN || '123') as string;
 
 function initSocket(server: http.Server): Server {
   const redis = new Redis({
@@ -49,6 +50,14 @@ function initSocket(server: http.Server): Server {
   socketServer
     .of((_, __, next) => {
       next(null, true);
+    })
+    .use((socket: Socket, next: Function) => {
+      if (socket.handshake.auth.token !== AUTH_TOKEN) {
+        console.log(`Invalid token ${socket.id}.`);
+        next(new Error('Invalid token.'));
+        return;
+      }
+      next();
     })
     .on('connection', (socket: Socket): void => {
       console.log(`New connection ${socket.id}`);

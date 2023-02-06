@@ -12,6 +12,7 @@ module.exports = {
         REDIS_PORT: 6279,
         REDIS_USER: '',
         REDIS_PASS: '',
+        AUTH_TOKEN: '123',
       },
       instances: 1,
       exec_mode: 'cluster',
