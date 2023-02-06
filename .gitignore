@@ -4,3 +4,4 @@ yarn.lock
 build
 config/production.json
 pm2/*
+coverage
