@@ -1,5 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a name="readme-top"></a>
+
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -7,8 +9,6 @@
 *** Don't forget to give the project a star!
 *** Thanks again! Now go create something AMAZING! :D
 -->
-
-
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -24,8 +24,6 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url] -->
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -50,8 +48,6 @@
   </p>
 </div>
 
-
-
 <!-- ABOUT THE PROJECT -->
 <!-- ## About The Project -->
 
@@ -70,52 +66,51 @@ Use the `BLANK_README.md` to get started.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
-
-
 ### Built With
-* [![Node][Node.js]][Node-url]
-* [![Express][Express]][Express-url]
-* [![SocketIO][Socket.io]][SocketIO-url]
+
+- [![Node][node.js]][node-url]
+- [![Express][express]][express-url]
+- [![SocketIO][socket.io]][socketio-url]
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
+Needs redis server, required env `NODE_ENV, NODE_PORT, REDIS_HOST, REDIS_PORT, REDIS_USER, REDIS_PASS`
+
 #### Available commands
+
 ```cmd
-    //  installing libs
-    yarn install
-    // starting application
-    yarn start
-    // test preformance
-    yarn test:preformance
-    // start inside pm2
-    yarn pm2:start
-    // open pm2 plus dashboard
-    yarn pm2:plus
-    // opem pm2 monitoring
-    yarn pm2:monit
-    // open pm2 status
-    yarn pm2:status
-    // pm2 restart running process
-    yarn pm2:restart
-    // pm2 stop running process
-    yarn pm2:stop
-    // pm2 delete running process or record
-    yarn pm2:delete
-    // open pm2 logs
-    yarn pm2:logs
-    // run application on development mode
-    yarn dev
-    // build application from ts files
-    yarn build,
+  npm run build
+  npm run dev
+  npm run test
+  npm start
 ```
+
+### Laravel channels
+
+Needs channel prefix `laravel.event.[(a-zA-Z|0-9)]` so that it won't clash with other channels.
+
+```php
+/**
+ * Get the channels the event should broadcast on.
+ *
+ * @return \Illuminate\Broadcasting\PrivateChannel
+ */
+public function broadcastOn()
+{
+    return new PrivateChannel('laravel.event.'.$this->order->id);
+}
+```
+
 #### Socket available events
+
 ```javascript
 
     // Example codes to trigger events
-     
+
     /**
-     * Namespace is 
+     * Namespace is
      * Note: Namespace is dynamic can be named anything and it's required
      * https://<domain>/root
      */
@@ -132,9 +127,9 @@ Use the `BLANK_README.md` to get started.
     socket.on("event_name", callback(payload) => {});
 ```
 
-[Express]: https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white
-[Express-url]: https://expressjs.com
-[Node.js]: https://img.shields.io/badge/node.js-215732?style=for-the-badge&logo=nodedotjs&logoColor=white
-[Node-url]: https://nodejs.org/en/
-[Socket.io]: https://img.shields.io/badge/socket.io-000000?style=for-the-badge&logo=socketdotio&logoColor=white
-[SocketIO-url]: https://socket.io/
+[express]: https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white
+[express-url]: https://expressjs.com
+[node.js]: https://img.shields.io/badge/node.js-215732?style=for-the-badge&logo=nodedotjs&logoColor=white
+[node-url]: https://nodejs.org/en/
+[socket.io]: https://img.shields.io/badge/socket.io-000000?style=for-the-badge&logo=socketdotio&logoColor=white
+[socketio-url]: https://socket.io/
