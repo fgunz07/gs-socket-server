@@ -6,24 +6,24 @@ import { createClient } from 'redis';
 
 const REDIS_HOST = (process.env.REDIS_HOST || 'localhost') as string;
 const REDIS_PORT = (process.env.REDIS_PORT || 6379) as number;
-const REDIS_USER = (process.env.REDIS_USER || '') as string;
-const REDIS_PASS = (process.env.REDIS_PASS || '') as string;
+// const REDIS_USER = (process.env.REDIS_USER || '') as string;
+// const REDIS_PASS = (process.env.REDIS_PASS || '') as string;
 const AUTH_TOKEN = (process.env.AUTH_TOKEN || '123') as string;
 
 function initSocket(server: http.Server): Server {
   const redis = new Redis({
     port: REDIS_PORT,
     host: REDIS_HOST,
-    username: REDIS_USER,
-    password: REDIS_PASS,
+    // username: REDIS_USER,
+    // password: REDIS_PASS,
     // db: ""
   });
 
   // Socket adopter
   const pubClient = createClient({
     url: `redis://${REDIS_HOST}:${REDIS_PORT}`,
-    username: REDIS_USER,
-    password: REDIS_PASS,
+    // username: REDIS_USER,
+    // password: REDIS_PASS,
   });
   const subClient = pubClient.duplicate();
 
