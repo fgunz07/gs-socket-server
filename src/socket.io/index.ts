@@ -51,13 +51,20 @@ function initSocket(server: http.Server): Server {
       next(null, true);
     })
     .on('connection', (socket: Socket): void => {
+      console.log(`New connection ${socket.id}`);
       socket.on(
         'trigger',
         (msg: { event: string; room?: string; data: any }): any => {
           if (msg.room) {
+            console.log(
+              `New event triggered from ${socket.id} to room ${msg.room}, event ${msg.event}`
+            );
             socket.nsp.to(msg.room).emit(msg.event, msg.data);
             return;
           }
+          console.log(
+            `New event triggered from ${socket.id}, event ${msg.event}`
+          );
           socket.nsp.emit(msg.event, msg.data);
         }
       );
@@ -65,6 +72,7 @@ function initSocket(server: http.Server): Server {
       socket.on(
         'join:room',
         (msg: { room: string; data: string | object }): void => {
+          console.log(`New socket ${socket.id} joined the room ${msg.room}.`);
           socket.join(msg.room);
           socket.nsp.emit('join:room', msg.data);
         }
@@ -73,6 +81,7 @@ function initSocket(server: http.Server): Server {
       socket.on(
         'leave:room',
         (msg: { room: string; data: string | object }): void => {
+          console.log(`New socket ${socket.id} left the room ${msg.room}.`);
           socket.leave(msg.room);
           socket.nsp.emit('leave:room', msg.data);
         }
@@ -80,12 +89,16 @@ function initSocket(server: http.Server): Server {
 
       redis.on('pmessage', (p, c, message) => {
         console.info(`pattern: ${p};\nchannel: ${c}\nreceived: ${message}`);
+        console.log(`Redis published message ${message} to channel ${c}`);
         message = JSON.parse(message);
         socket.nsp.emit('sample', {
           room: message.room,
           data: { message },
         });
       });
+    })
+    .on('disconnect', (socket: Socket) => {
+      console.log(`New socket disconnected ${socket.id}`);
     });
 
   return socketServer;
