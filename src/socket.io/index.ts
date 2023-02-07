@@ -59,13 +59,13 @@ async function initSocket(server: http.Server): Promise<{
             console.log(
               `New event triggered from ${socket.id} to room ${msg.room}, event ${msg.event}`
             );
-            socket.nsp.to(msg.room).emit(msg.event, msg.payload);
+            socket.to(msg.room).emit(msg.event, msg.payload);
             return;
           }
           console.log(
             `New event triggered from ${socket.id}, event ${msg.event}`
           );
-          socket.nsp.emit(msg.event, msg.payload);
+          socket.emit(msg.event, msg.payload);
         }
       );
 
@@ -74,7 +74,7 @@ async function initSocket(server: http.Server): Promise<{
         (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} joined the room ${msg.room}.`);
           socket.join(msg.room);
-          socket.nsp.emit('join:room', msg.payload);
+          socket.emit('join:room', msg.payload);
         }
       );
 
@@ -83,7 +83,7 @@ async function initSocket(server: http.Server): Promise<{
         (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} left the room ${msg.room}.`);
           socket.leave(msg.room);
-          socket.nsp.emit('leave:room', msg.payload);
+          socket.emit('leave:room', msg.payload);
         }
       );
 
@@ -91,7 +91,7 @@ async function initSocket(server: http.Server): Promise<{
         console.info(`pattern: ${p};\nchannel: ${c}\nreceived: ${message}`);
         console.log(`Redis published message ${message} to channel ${c}`);
         message = JSON.parse(message);
-        socket.nsp.emit('sample', {
+        socket.emit('sample', {
           room: message.room,
           payload: { message },
         });

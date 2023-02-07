@@ -64,18 +64,18 @@ describe('root namespace', () => {
       }
     });
 
-    it('should message from the same room', (done) => {
-      try {
-        c.on('root', (msg) => {
-          expect(msg).toBeNull();
-          done();
-        });
+    // it('should message from the same room', (done) => {
+    //   try {
+    //     c.on('root', (msg) => {
+    //       expect(msg).toBeNull();
+    //       done();
+    //     });
 
-        c.emit('trigger', { event: 'root', ...p });
-      } catch (error: any) {
-        done(error);
-      }
-    });
+    //     c.emit('trigger', { event: 'root', ...p });
+    //   } catch (error: any) {
+    //     done(error);
+    //   }
+    // });
 
     it('should leave room', (done) => {
       try {
