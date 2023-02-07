@@ -54,36 +54,36 @@ async function initSocket(server: http.Server): Promise<{
       console.log(`New connection ${socket.id}`);
       socket.on(
         'trigger',
-        (msg: { event: string; room?: string; data: any }): any => {
+        (msg: { event: string; room?: string; payload: any }): any => {
           if (msg.room) {
             console.log(
               `New event triggered from ${socket.id} to room ${msg.room}, event ${msg.event}`
             );
-            socket.nsp.to(msg.room).emit(msg.event, msg.data);
+            socket.nsp.to(msg.room).emit(msg.event, msg.payload);
             return;
           }
           console.log(
             `New event triggered from ${socket.id}, event ${msg.event}`
           );
-          socket.nsp.emit(msg.event, msg.data);
+          socket.nsp.emit(msg.event, msg.payload);
         }
       );
 
       socket.on(
         'join:room',
-        (msg: { room: string; data: string | object }): void => {
+        (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} joined the room ${msg.room}.`);
           socket.join(msg.room);
-          socket.nsp.emit('join:room', msg.data);
+          socket.nsp.emit('join:room', msg.payload);
         }
       );
 
       socket.on(
         'leave:room',
-        (msg: { room: string; data: string | object }): void => {
+        (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} left the room ${msg.room}.`);
           socket.leave(msg.room);
-          socket.nsp.emit('leave:room', msg.data);
+          socket.nsp.emit('leave:room', msg.payload);
         }
       );
 
@@ -93,7 +93,7 @@ async function initSocket(server: http.Server): Promise<{
         message = JSON.parse(message);
         socket.nsp.emit('sample', {
           room: message.room,
-          data: { message },
+          payload: { message },
         });
       });
     })

@@ -9,7 +9,7 @@ import initSocket from './index';
 describe('root namespace', () => {
   let c: Socket, r: Redis, s: http.Server, port: number, auth_token: string;
   const channel = 'laravel.event.7a7d0d7c-bb7b-40d7-ad65-f7b10927c25a';
-  const p = { room: channel, data: null };
+  const p = { room: channel, payload: null };
 
   beforeAll((done) => {
     try {
@@ -45,7 +45,7 @@ describe('root namespace', () => {
           expect(msg).toBeNull();
           done();
         });
-        c.emit('trigger', { event: 'root', data: p.data });
+        c.emit('trigger', { event: 'root', payload: p.payload });
       } catch (error: any) {
         done(error);
       }
@@ -80,7 +80,7 @@ describe('root namespace', () => {
     it('should leave room', (done) => {
       try {
         c.on('leave:room', (msg) => {
-          expect(msg).toBe(p.data);
+          expect(msg).toBe(p.payload);
           done();
         });
         c.emit('leave:room', p);
@@ -94,7 +94,7 @@ describe('root namespace', () => {
         const cp = JSON.stringify({ id: 1, room: 'sample123' });
 
         c.on('sample', (msg) => {
-          expect(JSON.stringify(msg.data.message)).toBe(cp);
+          expect(JSON.stringify(msg.payload.message)).toBe(cp);
           done();
         });
 
