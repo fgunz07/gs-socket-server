@@ -9,7 +9,7 @@ const mongo = async (): Promise<MongoClient | undefined> => {
   let mongoClient;
 
   try {
-    mongoClient = new MongoClient(MONGO_HOST);
+    mongoClient = new MongoClient(`${MONGO_HOST}`);
 
     await mongoClient.connect();
     console.log('MongoDB connected');
