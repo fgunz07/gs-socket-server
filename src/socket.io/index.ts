@@ -12,12 +12,15 @@ const AUTH_TOKEN = (process.env.AUTH_TOKEN || '123') as string;
 async function initSocket(server: http.Server): Promise<{
   socketServer: Server;
   redis: Redis;
-  mongo: MongoClient;
+  mongo: MongoClient | undefined;
 }> {
+  let mongoCollection;
   const mongo = await mongoDB();
   const redis = redisDB();
 
-  const mongoCollection = mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION);
+  if (mongo) {
+    mongoCollection = mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION);
+  }
 
   const socketServer = new Server(server, {
     cors: {
