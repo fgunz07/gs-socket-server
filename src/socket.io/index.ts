@@ -76,25 +76,28 @@ async function initSocket(server: http.Server): Promise<Server> {
       console.log(`New socket disconnected ${socket.id}`);
     });
 
-  redisSub.PSUBSCRIBE('laravel.event.*', function (message, channel) {
-    console.info(`channel: ${channel}\nreceived: ${message}`);
-    console.log(
-      `Redis published 'message' '${message}' to channel '${channel}'`
-    );
-    const jsonMessage = JSON.parse(message);
-    console.log(jsonMessage);
-    if (jsonMessage.room) {
+  redisSub.PSUBSCRIBE(
+    'laravel.event.*',
+    function (message: string, channel: string) {
+      console.info(`channel: ${channel}\nreceived: ${message}`);
       console.log(
-        `Triggered redis event to room ${jsonMessage.room} with action ${jsonMessage.event}`
+        `Redis published 'message' '${message}' to channel '${channel}'`
       );
-      socketServer
-        .to(jsonMessage.room)
-        .emit(jsonMessage.event, jsonMessage.payload);
-      return;
+      const jsonMessage = JSON.parse(message);
+      console.log(jsonMessage);
+      if (jsonMessage.room) {
+        console.log(
+          `Triggered redis event to room ${jsonMessage.room} with action ${jsonMessage.event}`
+        );
+        socketServer
+          .to(jsonMessage.room)
+          .emit(jsonMessage.event, jsonMessage.payload);
+        return;
+      }
+      console.log(`Triggered redis event with action ${jsonMessage.event}`);
+      socketServer.emit(jsonMessage.event, jsonMessage.payload);
     }
-    console.log(`Triggered redis event with action ${jsonMessage.event}`);
-    socketServer.emit(jsonMessage.event, jsonMessage.payload);
-  });
+  );
 
   return socketServer;
 }
