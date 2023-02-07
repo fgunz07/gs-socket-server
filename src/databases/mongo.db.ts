@@ -17,6 +17,7 @@ const mongo = async (): Promise<MongoClient | undefined> => {
     );
 
     await mongoClient.connect();
+    console.log('MongoDB connected');
 
     return mongoClient;
   } catch (error: any) {
