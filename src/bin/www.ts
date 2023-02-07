@@ -5,8 +5,11 @@ import initSocket from '../socket.io';
 
 const _PORT = (process.env.NODE_PORT || 3000) as number;
 
-const server = http.createServer(app);
+async function init() {
+  const server = http.createServer(app);
+  const { socketServer } = await initSocket(server);
+  socketServer.listen(_PORT);
+  console.log(`[::]:${_PORT}`);
+}
 
-initSocket(server);
-
-server.listen(_PORT, () => console.log(`[::]:${_PORT}`));
+init();
