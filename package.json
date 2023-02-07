@@ -50,7 +50,8 @@
       "NODE_ENV": "development",
       "NODE_PORT": 3000,
       "REDIS_HOST": "127.0.0.1",
-      "REDIS_PORT": 6379
+      "REDIS_PORT": 6379,
+      "AUTH_TOKEN": "123.456"
     }
   }
 }

@@ -43,7 +43,11 @@ async function initSocket(server: http.Server): Promise<{
       next(null, true);
     })
     .use((socket: Socket, next: Function) => {
-      if (socket.handshake.auth.token !== AUTH_TOKEN) {
+      const tokens = AUTH_TOKEN.split('.');
+      if (
+        socket.handshake.query.socket_key !== tokens[0] &&
+        socket.handshake.query.socket_secret !== tokens[1]
+      ) {
         console.log(`Invalid token ${socket.id}.`);
         next(new Error('Invalid token.'));
         return;
