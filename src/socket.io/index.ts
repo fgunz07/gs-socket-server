@@ -18,8 +18,12 @@ async function initSocket(server: http.Server): Promise<{
   const mongo = await mongoDB();
   const redis = redisDB();
 
-  if (mongo) {
-    mongoCollection = mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION);
+  try {
+    if (mongo) {
+      mongoCollection = mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION);
+    }
+  } catch (error) {
+    console.log(`MongoError: ${error}`);
   }
 
   const socketServer = new Server(server, {
