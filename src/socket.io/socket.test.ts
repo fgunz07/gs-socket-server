@@ -7,15 +7,7 @@ import app from '../app';
 import initSocket from './index';
 
 describe('root namespace', () => {
-  let c: Socket,
-    r: Redis,
-    s: http.Server,
-    port: number,
-    redis_host: string,
-    redis_port: number,
-    redis_user: string,
-    redis_pass: string,
-    auth_token: string;
+  let c: Socket, r: Redis, s: http.Server, port: number, auth_token: string;
   const channel = 'laravel.event.7a7d0d7c-bb7b-40d7-ad65-f7b10927c25a';
   const p = { room: channel, data: null };
 
@@ -23,29 +15,17 @@ describe('root namespace', () => {
     try {
       port = (process.env.PORT || 3000) as number;
       auth_token = (process.env.AUTH_TOKEN || '123') as string;
-      redis_host = (process.env.REDIS_HOST || '127.0.0.1') as string;
-      redis_port = (process.env.REDIS_PORT || 6379) as number;
-      redis_user = (process.env.REDIS_USER || '') as string;
-      redis_pass = (process.env.REDIS_PASS || '') as string;
 
       s = http.createServer(app);
-      initSocket(s);
-      s.listen(port, () => {
+      s.listen(port, async () => {
+        const { redis } = await initSocket(s);
+        r = redis.duplicate();
         c = io(`http://localhost:${port}/root`, {
           auth: {
             token: auth_token,
           },
           transports: ['websocket', 'polling'],
         });
-
-        r = new Redis({
-          port: redis_port,
-          host: redis_host,
-          username: redis_user,
-          password: redis_pass,
-          // db: ""
-        });
-
         done();
       });
     } catch (error: any) {
@@ -54,7 +34,6 @@ describe('root namespace', () => {
   });
 
   afterAll(() => {
-    s.close();
     r.quit();
     c.close();
   });

@@ -1,45 +1,29 @@
 import * as http from 'http';
-import { Server, Socket } from 'socket.io';
 import Redis from 'ioredis';
-import { createAdapter } from '@socket.io/redis-adapter';
-import { createClient } from 'redis';
+import { Server, Socket } from 'socket.io';
+import { MongoClient } from 'mongodb';
+import { createAdapter } from '@socket.io/mongo-adapter';
 
-const REDIS_HOST = (process.env.REDIS_HOST || 'localhost') as string;
-const REDIS_PORT = (process.env.REDIS_PORT || 6379) as number;
-// const REDIS_USER = (process.env.REDIS_USER || '') as string;
-// const REDIS_PASS = (process.env.REDIS_PASS || '') as string;
+import redisDB from '../databases/redis.db';
+import mongoDB, { MONGO_DBNAME, MONGO_COLLECTION } from '../databases/mongo.db';
+
 const AUTH_TOKEN = (process.env.AUTH_TOKEN || '123') as string;
 
-function initSocket(server: http.Server): Server {
-  const redis = new Redis({
-    port: REDIS_PORT,
-    host: REDIS_HOST,
-    // username: REDIS_USER,
-    // password: REDIS_PASS,
-    // db: ""
-  });
+async function initSocket(server: http.Server): Promise<{
+  socketServer: Server;
+  redis: Redis;
+  mongo: MongoClient;
+}> {
+  const mongo = await mongoDB();
+  const redis = redisDB();
 
-  // Socket adopter
-  const pubClient = createClient({
-    url: `redis://${REDIS_HOST}:${REDIS_PORT}`,
-    // username: REDIS_USER,
-    // password: REDIS_PASS,
-  });
-  const subClient = pubClient.duplicate();
+  const mongoCollection = mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION);
 
   const socketServer = new Server(server, {
     cors: {
       origin: '*',
     },
-  }).adapter(createAdapter(pubClient, subClient));
-
-  redis.on('ready', () => {
-    console.log(`Redis connection is ready.`);
-  });
-
-  redis.on('error', (error) => {
-    console.log(`Error: ${error}`);
-  });
+  }).adapter(createAdapter(mongoCollection));
 
   redis.psubscribe('laravel.event.*', (error, _) => {
     if (error) {
@@ -110,7 +94,7 @@ function initSocket(server: http.Server): Server {
       console.log(`New socket disconnected ${socket.id}`);
     });
 
-  return socketServer;
+  return { socketServer, redis, mongo };
 }
 
 export default initSocket;
