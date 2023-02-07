@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const MONGO_HOST = (process.env.MONGO_DBNAME || 'localhost') as string;
+const MONGO_HOST = (process.env.MONGO_HOST || 'localhost') as string;
 export const MONGO_DBNAME = (process.env.MONGO_DBNAME || 's-adapter') as string;
 export const MONGO_COLLECTION = (process.env.MONGO_COLLECTION ||
   'socket.io-adapter-events') as string;
