@@ -1,35 +1,23 @@
 import * as http from 'http';
-import Redis from 'ioredis';
 import { Server, Socket } from 'socket.io';
-import { MongoClient } from 'mongodb';
-import { createAdapter } from '@socket.io/mongo-adapter';
+import { createClient } from 'redis';
+import { createAdapter } from '@socket.io/redis-adapter';
 
-import redisDB from '../databases/redis.db';
-import mongoDB, { MONGO_DBNAME, MONGO_COLLECTION } from '../databases/mongo.db';
-
+const REDIS_HOST = (process.env.REDIS_HOST || 'localhost:6379') as string;
 const AUTH_TOKEN = (process.env.AUTH_TOKEN || '123.456') as string;
 
-async function initSocket(server: http.Server): Promise<{
-  socketServer: Server;
-  redis: Redis;
-  mongo: MongoClient | undefined;
-}> {
-  const mongo = await mongoDB();
-  const redis = redisDB();
+async function initSocket(server: http.Server): Promise<Server> {
+  const redisPub = createClient({ url: `redis://${REDIS_HOST}` });
+  const redisSub = redisPub.duplicate();
+
+  await redisPub.connect();
+  await redisSub.connect();
 
   const socketServer = new Server(server, {
     cors: {
       origin: '*',
     },
-  }).adapter(
-    createAdapter(mongo.db(MONGO_DBNAME).collection(MONGO_COLLECTION))
-  );
-
-  redis.psubscribe('laravel.event.*', (error, _) => {
-    if (error) {
-      console.error(`Unable to subcribe to channel * ${error.message}`);
-    }
-  });
+  }).adapter(createAdapter(redisPub, redisSub));
 
   socketServer
     .of((_, __, next) => {
@@ -47,7 +35,7 @@ async function initSocket(server: http.Server): Promise<{
       }
       next();
     })
-    .on('connection', (socket: Socket): void => {
+    .on('connection', async (socket: Socket): Promise<void> => {
       console.log(`New connection ${socket.id}`);
       socket.on(
         'trigger',
@@ -83,22 +71,32 @@ async function initSocket(server: http.Server): Promise<{
           socket.broadcast.emit('leave:room', msg.payload);
         }
       );
-
-      redis.on('pmessage', (p, c, message) => {
-        console.info(`pattern: ${p};\nchannel: ${c}\nreceived: ${message}`);
-        console.log(`Redis published message ${message} to channel ${c}`);
-        message = JSON.parse(message);
-        socket.broadcast.emit('sample', {
-          room: message.room,
-          payload: { message },
-        });
-      });
     })
     .on('disconnect', (socket: Socket) => {
       console.log(`New socket disconnected ${socket.id}`);
     });
 
-  return { socketServer, redis, mongo };
+  redisSub.PSUBSCRIBE('laravel.event.*', function (message, channel) {
+    console.info(`channel: ${channel}\nreceived: ${message}`);
+    console.log(
+      `Redis published 'message' '${message}' to channel '${channel}'`
+    );
+    const jsonMessage = JSON.parse(message);
+    console.log(jsonMessage);
+    if (jsonMessage.room) {
+      console.log(
+        `Triggered redis event to room ${jsonMessage.room} with action ${jsonMessage.event}`
+      );
+      socketServer
+        .to(jsonMessage.room)
+        .emit(jsonMessage.event, jsonMessage.payload);
+      return;
+    }
+    console.log(`Triggered redis event with action ${jsonMessage.event}`);
+    socketServer.emit(jsonMessage.event, jsonMessage.payload);
+  });
+
+  return socketServer;
 }
 
 export default initSocket;

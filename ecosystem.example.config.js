@@ -8,10 +8,7 @@ module.exports = {
       env: {
         NODE_ENV: 'development',
         NODE_PORT: 3000,
-        REDIS_HOST: '127.0.0.1',
-        REDIS_PORT: 6279,
-        REDIS_USER: '',
-        REDIS_PASS: '',
+        REDIS_HOST: '127.0.0.1:6379',
         AUTH_TOKEN: '123',
         MONGO_HOST: '',
         MONGO_DBNAME: '',

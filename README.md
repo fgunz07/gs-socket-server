@@ -93,6 +93,20 @@ Needs channel prefix `laravel.event.[(a-zA-Z|0-9)]` so that it won't clash with 
 
 ```php
 /**
+ * Get the data to broadcast.
+ *
+ * @return array
+ */
+public function broadcastWith()
+{
+    return [
+      'room' => 'test-event', // optional
+      'event' => 'event-name',
+      'payload' => [], // string or object
+    ];
+}
+
+/**
  * Get the channels the event should broadcast on.
  *
  * @return \Illuminate\Broadcasting\PrivateChannel
