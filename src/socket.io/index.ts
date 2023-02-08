@@ -59,7 +59,7 @@ async function initSocket(server: http.Server): Promise<Server> {
         (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} joined the room ${msg.room}.`);
           socket.join(msg.room);
-          socket.broadcast.emit('join:room', msg.payload);
+          socket.broadcast.to(msg.room).emit('join:room', msg.payload);
         }
       );
 
@@ -68,12 +68,13 @@ async function initSocket(server: http.Server): Promise<Server> {
         (msg: { room: string; payload: string | object }): void => {
           console.log(`New socket ${socket.id} left the room ${msg.room}.`);
           socket.leave(msg.room);
-          socket.broadcast.emit('leave:room', msg.payload);
+          socket.broadcast.to(msg.room).emit('leave:room', msg.payload);
         }
       );
-    })
-    .on('disconnect', (socket: Socket) => {
-      console.log(`New socket disconnected ${socket.id}`);
+
+      socket.on('disconnect', (reason) => {
+        console.log(`New socket disconnected ${socket.id}.\nReason: ${reason}`);
+      });
     });
 
   redisSub.PSUBSCRIBE(
